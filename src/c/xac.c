@@ -5,13 +5,6 @@
  *      I've been waiting too long to work on this. So here, have a thing.
  */
 
-/* Developer notes:
- * linker spec takes -l
- * linkable binary format takes -b
- * -h is obviously help
- * -i is for importing files
- */
-
 
 //-----------------------------------------------------------------------------
 const char* help_msg = // help msg zone
@@ -70,6 +63,7 @@ const char* help_msg = // help msg zone
 
 #include <XAC/xac.h>
 #include <XAC/jsmn.h>
+#include <XAC/darklight.std.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -87,23 +81,9 @@ register char *s2;
 int main(int* argc, char** argv){
 	int arg_switch = 0;
 	for(int l=1;l<argc;l++){
-		/*NOTE: may depricate, or re-use... DO NOT REMOVE!!!
-
-		if(arg_switch)goto PARSE_INPUT; //handle input events after continue
-
-		if(streq(argv[l],STR_CMD(("-h"),("/?")))){
-			printf(help_msg);
-			return 0;
-		}
-		PARSE_INPUT:
-
-
-		switch(arg_switch){
-			case 1: //help
-
-			break;
-		}
-		*/
+		/* Begin looping through arguments supplied by
+		 * stdin. Appropriate input args to appropriate lists.
+		 */
 		if(argv[l][0]==STR_CMD){
 			for(l2=1;argv[l][l2]=="\0";l2++){
 				switch(argv[l][l2]){
