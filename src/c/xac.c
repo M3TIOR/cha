@@ -5,16 +5,28 @@
  *      I've been waiting too long to work on this. So here, have a thing.
  */
 
+#include <XAC/meta.h>
 
 //-----------------------------------------------------------------------------
 const char* help_msg = // help msg zone
+"\
+|             XAC | E[x]plicit Assembly Compiler              |\n\
+|=============================================================|\n\
+|syntax:                                                      |\n\
+|  xac -abcABC <argument> -a <argumentX> -efg...              |\n\
+|-------------------------------------------------------------|\n\
+|#############################################################|\n\
+|                                                             |\n\
+|    For more help please check the manual for this tool      |\n\
+|    ---- man -k darklight-xac ----                           |\n\
+|                                                             |\n\
+|#############################################################|\n\
+";
+//I'm chopping this part off and adding it to the manual
+// yea, yea they aren't in alphabetical order anymore ok...
+// I had to make some adjustments
+/* NOTE: That wouldn't have compiled without the backslashes above.
 "
-|             XAC | E[x]plicit Assembly Compiler              |
-|=============================================================|
-|syntax:                                                      |
-|  xac -abcABC <argument> -a <argumentX> -efg...              |
-|-------------------------------------------------------------|
-|#############################################################|
 |                                                             |
 |    -b <binary format> :                                     |
 |        Adds target binary format to the compilation target  |
@@ -22,14 +34,13 @@ const char* help_msg = // help msg zone
 |        assembled and placed in the specified output DIR.    |
 |                                                             |
 |    -B <binary format plugin> :                              |
-|        Adds target plugin to the binary format controller.  |
-|        You can then select said binary format by using the  |
-|        argument ( -b [FORMAT] ).                            |
+|        Adds target plugin to the binary format controller   |
+|        then asserts it to the compilation target list.      |
 |                                                             |
-|    -c <config file> :                                       |
+|    -l <language configuration file> :                       |
 |        Specifies external language configuration files.     |
 |                                                             |
-|    -C <language configuration file> :                       |
+|    -L <language configuration file> :                       |
 |        Specifies internal language configuration files.     |
 |                                                             |
 |    -i <config file directory> :                             |
@@ -37,9 +48,9 @@ const char* help_msg = // help msg zone
 |        file search list. XAC will read any json file in the |
 |        target directory.                                    |
 |                                                             |
-|    -I <config file> :                                       |
-|        Adds the specified configuraton json to the main     |
-|        config directory.                                    |
+|    -I <file> :                                              |
+|        Imports specified file to the appropriate plugin     |
+|        location and returns error if one isn't found.       |
 |                                                             |
 |    -o <output directory> :                                  |
 |        Adds specified directory to the list of output DIRs. |
@@ -58,6 +69,7 @@ const char* help_msg = // help msg zone
 |                                                             |
 |#############################################################|
 "
+*/
 //-----------------------------------------------------------------------------
 
 
