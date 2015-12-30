@@ -72,12 +72,12 @@ const char* help_msg = // help msg zone
 */
 //-----------------------------------------------------------------------------
 
-
-#include <XAC/xac.h>
-#include <XAC/jsmn.h>
-#include <XAC/darklight.std.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <XAC/meta.h> //version control handle
+#include <XAC/lang.h> //xac parser
+#include <XAC/jsmn.h> //json support
+#include <XAC/darklight.std.h> //streq
+#include <stdlib.h> //malloc free
+#include <stdio.h> //file io
 
 //special thanks to ftp://ftp.update.uu.se/pub/pdp11/rt/11sp68/604/streq.c
 int streq(s1, s2)
@@ -90,12 +90,35 @@ register char *s2;
 	return (0);
 }
 
+//Putting up an int buffer for
+//storing loop counters
+int l[2];
+
 int main(int* argc, char** argv){
-	int arg_switch = 0;
-	for(int l=1;l<argc;l++){
+	unsigned short arg_switch = 0; //argument target storage variable
+	for(l[0]=1;l[0]<argc;l[0]++){
 		/* Begin looping through arguments supplied by
 		 * stdin. Appropriate input args to appropriate lists.
 		 */
+
+		//Alternative using switch
+		if(argv[l[0]][l[1]]=='-'){
+			do{
+				l[1]++;
+				arg_switch = 0;
+				arg_switch =<< 8;
+				arg_switch = (int)argv[l[0]][l[1]];
+			}while(argv[l[0]][l[1]]!='\0' && l[1]<=4);
+			arg_switch=<<8*(4-l[1]); // move bits to proper position.
+			switch(arg_switch){
+				case (int)"h\0\0\0":printf(help_msg);return 0;
+				default:
+			}
+		}else{
+			printf("error: %s is not a correct argument for XAC",argv[l]);
+		}
+
+		/*
 		if(argv[l][0]==STR_CMD){
 			for(l2=1;argv[l][l2]=="\0";l2++){
 				switch(argv[l][l2]){
@@ -106,5 +129,6 @@ int main(int* argc, char** argv){
 				}
 			}
 		}
+		*/
 	}
 }
