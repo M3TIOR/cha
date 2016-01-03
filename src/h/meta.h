@@ -26,3 +26,15 @@
  * I'm using a project builder like make, If somebody gets a bright idea
  * to try and compile it themselfs without using make, this is here...
  */
+
+/*
+ * I'm also moving this here because it needs to be uniform across the manual
+ * pages and the application
+ */
+// COMMAND BUILD SWITCH
+#ifdef CONFIG_WINDOWS
+#define STR_CMD '-'
+#endif //CONFIG_WINDOWS
+#ifndef CONFIG_WINDOWS
+#define STR_CMD '/'
+#endif //NCONFIG W

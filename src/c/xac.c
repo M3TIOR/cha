@@ -5,8 +5,6 @@
  *      I've been waiting too long to work on this. So here, have a thing.
  */
 
-#include <XAC/meta.h>
-
 //-----------------------------------------------------------------------------
 const char* help_msg = // help msg zone
 "\
@@ -101,21 +99,37 @@ int main(int* argc, char** argv){
 		 * stdin. Appropriate input args to appropriate lists.
 		 */
 
+		 /*
 		//Alternative using switch
-		if(argv[l[0]][l[1]]=='-'){
+		if(argv[l[0]][l[1]]==STR_CMD){
 			do{
 				l[1]++;
 				arg_switch = 0;
-				arg_switch =<< 8;
+				arg_switch <<= 8;
 				arg_switch = (int)argv[l[0]][l[1]];
 			}while(argv[l[0]][l[1]]!='\0' && l[1]<=4);
-			arg_switch=<<8*(4-l[1]); // move bits to proper position.
+			arg_switch<<=(8*(4-l[1])); // move bits to proper position.
 			switch(arg_switch){
-				case (int)"h\0\0\0":printf(help_msg);return 0;
+				case ((int)'h'<<24):printf(help_msg);return 0;
 				default:
 			}
 		}else{
 			printf("error: %s is not a correct argument for XAC",argv[l]);
+		}
+		*/
+
+		if(argv[l[0]][0]==STR_CMD){
+			if(argv[l[0]][2]!="\0")
+				printf("error: %s is not a correct argument for XAC",argv[l[0]]);
+			switch(argv[l[0]][1]){
+				case 'b':
+
+				break;
+				default:
+					printf("error: %s is not a correct argument for XAC",argv[l[0]]);
+			}
+		}else{
+
 		}
 
 		/*
@@ -130,5 +144,20 @@ int main(int* argc, char** argv){
 			}
 		}
 		*/
+
+		//Count input arguments first to allocate pointers in RAM
+		//to appropriate input blobs to their proper subfields
+		if(argv[l[0]][0]==STR_CMD){
+			switch(argv[l[0][1]]){
+				case 'h': printf(help_msg); return 0;
+				case '':
+
+				break;
+				default:
+					printf("error: %s is not a correct argument for XAC",argv[l[0]]);
+			}
+		}else{
+			
+		}
 	}
 }
