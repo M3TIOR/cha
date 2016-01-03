@@ -5,92 +5,32 @@
  *      I've been waiting too long to work on this. So here, have a thing.
  */
 
-//-----------------------------------------------------------------------------
-const char* help_msg = // help msg zone
-"\
-|             XAC | E[x]plicit Assembly Compiler              |\n\
-|=============================================================|\n\
-|syntax:                                                      |\n\
-|  xac -abcABC <argument> -a <argumentX> -efg...              |\n\
-|-------------------------------------------------------------|\n\
-|#############################################################|\n\
-|                                                             |\n\
-|    For more help please check the manual for this tool      |\n\
-|    ---- man -k darklight-xac ----                           |\n\
-|                                                             |\n\
-|#############################################################|\n\
-";
-//I'm chopping this part off and adding it to the manual
-// yea, yea they aren't in alphabetical order anymore ok...
-// I had to make some adjustments
-/* NOTE: That wouldn't have compiled without the backslashes above.
-"
-|                                                             |
-|    -b <binary format> :                                     |
-|        Adds target binary format to the compilation target  |
-|        list. All binary formats on this list will be        |
-|        assembled and placed in the specified output DIR.    |
-|                                                             |
-|    -B <binary format plugin> :                              |
-|        Adds target plugin to the binary format controller   |
-|        then asserts it to the compilation target list.      |
-|                                                             |
-|    -l <language configuration file> :                       |
-|        Specifies external language configuration files.     |
-|                                                             |
-|    -L <language configuration file> :                       |
-|        Specifies internal language configuration files.     |
-|                                                             |
-|    -i <config file directory> :                             |
-|        Adds the specified directory to the configuration    |
-|        file search list. XAC will read any json file in the |
-|        target directory.                                    |
-|                                                             |
-|    -I <file> :                                              |
-|        Imports specified file to the appropriate plugin     |
-|        location and returns error if one isn't found.       |
-|                                                             |
-|    -o <output directory> :                                  |
-|        Adds specified directory to the list of output DIRs. |
-|                                                             |
-|    -q :                                                     |
-|        Silences all errors from stderr.                     |
-|                                                             |
-|    -v :                                                     |
-|        Display version data.                                |
-|                                                             |
-|    -V :                                                     |
-|        Outputs verbose debug information.                   |
-|                                                             |
-|    -Z :                                                     |
-|        Output raw version as string.                        |
-|                                                             |
-|#############################################################|
-"
-*/
-//-----------------------------------------------------------------------------
-
 #include <XAC/meta.h> //version control handle
 #include <XAC/lang.h> //xac parser
 #include <XAC/jsmn.h> //json support
-#include <XAC/darklight.std.h> //streq
+#include <XAC/darklight.std.h> //streq and other nice things
 #include <stdlib.h> //malloc free
 #include <stdio.h> //file io
 
-//special thanks to ftp://ftp.update.uu.se/pub/pdp11/rt/11sp68/604/streq.c
-int streq(s1, s2)
-register char *s1;
-register char *s2;
-{
-	while (*s1++ == *s2) {
-	    if (*s2++ == 0)return (1);
-	}
-	return (0);
-}
+//BEGIN INPUT LISTS
+enum lists{
+	sub_archs,
+	arch_parents,
+	binary_formats,
+	binary_ext,
+	languages,
+	language_ext,
+	config_dirs,
+	output_dirs,
+};
+
+int list_count[8] = {0,0,0,0,0,0,0,0};
+char** list_string[8];
+//END INPUT LISTS
 
 //Putting up an int buffer for
 //storing loop counters
-int l[2];
+int l[5];
 
 int main(int* argc, char** argv){
 	unsigned short arg_switch = 0; //argument target storage variable
@@ -99,65 +39,103 @@ int main(int* argc, char** argv){
 		 * stdin. Appropriate input args to appropriate lists.
 		 */
 
-		 /*
-		//Alternative using switch
-		if(argv[l[0]][l[1]]==STR_CMD){
-			do{
-				l[1]++;
-				arg_switch = 0;
-				arg_switch <<= 8;
-				arg_switch = (int)argv[l[0]][l[1]];
-			}while(argv[l[0]][l[1]]!='\0' && l[1]<=4);
-			arg_switch<<=(8*(4-l[1])); // move bits to proper position.
-			switch(arg_switch){
-				case ((int)'h'<<24):printf(help_msg);return 0;
-				default:
-			}
-		}else{
-			printf("error: %s is not a correct argument for XAC",argv[l]);
-		}
-		*/
+		/* ARG implementation checklist
+		 * -h = MOST : lINUX,Y; WINDOWS,Y; MAC,Y;
+		 * -a = FALSE
+		 * -A = FALSE
+		 * -b = FALSE
+		 * -B = FALSE
+		 * -i = FALSE
+		 * -I = FALSE
+		 * -l = FALSE
+		 * -L = FALSE
+		 * -o = FALSE
+		 * -q = FALSE
+		 * -v = FALSE
+		 * -V = FALSE
+		 * -Z = FALSE
+		 */
 
+		//XXX: I'm making this explicitlhy two passes
+		//	cause we realistically shoulldn't need more.
+
+		//NOTE: FIRST PASS
+		//Count input arguments first to allocate pointers in RAM
+		//to appropriate input blobs to their proper subfields
+		//and keep code from being executed before all bad args
+		//are removed from the input field
 		if(argv[l[0]][0]==STR_CMD){
 			if(argv[l[0]][2]!="\0")
-				printf("error: %s is not a correct argument for XAC",argv[l[0]]);
-			switch(argv[l[0]][1]){
-				case 'b':
+				printf("error: %s is not a correct argument for XAC",argv[l[0]]), return 0;
+			switch(argv[l[0][1]]){
+				case 'h': case '?': //ASSERT HELP
+				//COVERING BOTH LINUX AND WINDOWS SYNTAX HERE
+#if defined ( CONFIG_OS_LINUX || CONFIG_OS_OSX )
+					//woo! killin it! linux and osx in one!
+					printf("\
+					|             XAC | E[x]plicit Assembly Compiler              |\n\
+					|=============================================================|\n\
+					|syntax:                                                      |\n\
+					|  xac -A <argument> -a <argument> input...                   |\n\
+					|-------------------------------------------------------------|\n\
+					|#############################################################|\n\
+					|                                                             |\n\
+					|    For more help please check the manual for this tool      |\n\
+					|    ---- man -k darklight-xac ----                           |\n\
+					|                                                             |\n\
+					|#############################################################|\n\
+					");
+#endif //CONFIG_OS_LINUX and CONFIG_OS_OSX
+#ifdef CONFIG_OS_WINDOWS
+					printf("\
+					|             XAC | E[x]plicit Assembly Compiler              |\n\
+					|=============================================================|\n\
+					|syntax:                                                      |\n\
+					|  xac /A <argument> /a <argument> input...                   |\n\
+					|-------------------------------------------------------------|\n\
+					|#############################################################|\n\
+					|                                                             |\n\
+					|    For more help please check the manual for this tool      |\n\
+					|                                                             |\n\
+					|                                                             |\n\
+					|#############################################################|\n\
+					");
+#ifdef //CONFIG_OS_WINDOWS
+					return 0;
+				//END HELP MSG ZONE
+				case 'a':list_count[lists.sub_archs]++;break;
+				case 'A':list_count[lists.arch_parents]++;break;
+				case 'b':list_count[lists.binary_formats]++;break;
+				case 'B':list_count[lists.binary_ext]++;break;
+				case 'i':list_count[lists.languages]++;break;
+				case 'I':
+
+				break;
+				case 'l':
+
+				break;
+				case 'L':
 
 				break;
 				default:
-					printf("error: %s is not a correct argument for XAC",argv[l[0]]);
+					printf("error: %s is not a correct argument for XAC",argv[l[0]]); return 0;
 			}
 		}else{
 
 		}
 
-		/*
-		if(argv[l][0]==STR_CMD){
-			for(l2=1;argv[l][l2]=="\0";l2++){
-				switch(argv[l][l2]){
-					case 'h': //ASSERT HELP TO AVOID NEEDLESS PROCESSING
-						printf(help_msg);
-						return(0);
-					case
-				}
-			}
-		}
-		*/
 
-		//Count input arguments first to allocate pointers in RAM
-		//to appropriate input blobs to their proper subfields
+
+		//NOTE: SECOND PASS
+		//pass the input args to thier appropriate subfields
 		if(argv[l[0]][0]==STR_CMD){
 			switch(argv[l[0][1]]){
-				case 'h': printf(help_msg); return 0;
 				case '':
 
 				break;
-				default:
-					printf("error: %s is not a correct argument for XAC",argv[l[0]]);
 			}
 		}else{
-			
+
 		}
 	}
 }

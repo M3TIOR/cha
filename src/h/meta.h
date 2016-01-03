@@ -20,6 +20,9 @@
 //cause build date plays a factor sometimes... IDK.
 #error "Please pass the compilation date and time through here too..."
 #endif //DATE
+#ifndef BUILDNOTE
+#warning "It's recommended that you supply a build note with each non-stable build"
+#endif //BUILDNOTE
 
 /*
  * While realistically speaking, nobody should ever encounter this since
@@ -32,9 +35,9 @@
  * pages and the application
  */
 // COMMAND BUILD SWITCH
-#ifdef CONFIG_WINDOWS
-#define STR_CMD '-'
-#endif //CONFIG_WINDOWS
-#ifndef CONFIG_WINDOWS
+#ifdef CONFIG_OS_WINDOWS
 #define STR_CMD '/'
+#endif //CONFIG_WINDOWS
+#ifndef CONFIG_OS_WINDOWS
+#define STR_CMD '-'
 #endif //NCONFIG W
