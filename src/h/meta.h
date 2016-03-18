@@ -49,8 +49,19 @@
  * reuse on multiple platforms.
  */
 #ifdef CONFIG_SHELL_?
-#define META_SHELL_C_CMD "/"
-#define META_SHELL_C_SHVAR ""
+/*
+ * Figured making an enumerated set was better
+ * than having a bunch of underscores, because
+ * OOP! << can't believe I'm actually using that acronym.
+ */
+enum META_SHELL{
+	enum triggers{
+		
+	}
+	cmd="\\"; //Windows
+	shvar0="-"; //Bourne [Sh]ell
+	shvar1="--"; //Bourne Shell Alternative
+}
 #else
 #warning "No shell specified."
 #endif //SHELL QUERY
