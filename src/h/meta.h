@@ -32,8 +32,18 @@
  * it's still gonna be just as long and take up just as much space...
  * then again. that's why they're originally stored as macros, so they aren't allowed to
  * consume memory where they aren't needed.
+ *
+ * proper usage of this optimization would look something along the lines of...
+ *---------------------------------
+ * main.c:
+ *	#define META_OBJECT
+ *	#include "meta.h"
+ *	#undef META_OBJECT
+ * //EOF
+ *---------------------------------
+ * obviously it's not perfect but it can be usefull
  */
-#if defined (( META_CONFIG_OBJECT && __cplusplus ))
+#if defined (( META_OBJECT && __cplusplus ))
 namespace META{
 	const char* version=VERSION;
 	const char* date=DATE;
