@@ -31,13 +31,44 @@
  */
 
 /*
+ * This is here for application developers.
+ * common OS meta's
+ */
+#ifdef CONFIG_OS_?
+/*
+ * Don't have anything here atm, probs add something later.
+ */
+#else
+#warning "No operaing system defined."
+#endif //OS QUERY
+
+/*
+ * This is also here for application devs,
+ * with the assumption that they have a CLI.
+ * Realistically this is here to give you some meta junk for making your CLI easy to
+ * reuse on multiple platforms.
+ */
+#ifdef CONFIG_SHELL_?
+#define META_SHELL_C_CMD "/"
+#define META_SHELL_C_SHVAR ""
+#else
+#warning "No shell specified."
+#endif //SHELL QUERY
+
+/*
  * I'm also moving this here because it needs to be uniform across the manual
  * pages and the application
  */
 // COMMAND BUILD SWITCH
-#ifdef CONFIG_OS_WINDOWS
-#define STR_CMD '/'
-#endif //CONFIG_WINDOWS
-#ifndef CONFIG_OS_WINDOWS
-#define STR_CMD '-'
-#endif //NCONFIG W
+#ifdef CONFIG_SHELL_?
+#ifndef CONFIG_SHELL_CUSTOM
+#warning "No custom shell handle defined, using default."
+#else
+#define 
+
+#endif
+#elif defined CONFIG_SHELL_WINDOWS
+#define STR_CMD "/"
+#elif defined CONFIG_SHELL_SHVARIANT
+#define STR_CMD "-"
+#endif
