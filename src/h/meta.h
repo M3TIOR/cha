@@ -18,7 +18,7 @@
 #endif //VERSION
 #ifndef DATE
 //cause build date plays a factor sometimes... IDK.
-#error "Please pass the compilation date and time through here too..."
+#define DATE __DATE__
 #endif //DATE
 #ifndef BUILDNOTE
 #warning "It's recommended that you supply a build note with each non-stable build"
@@ -98,7 +98,7 @@ namespace META{
  *		}
  *	}
  */
-#define META_SHELL.ARGT.cmd "/\"
+#define META_SHELL.ARGT.cmd "/"
 #define META_SHELL.ARGT.shvar0 "-"
 #define META_SHELL.ARGT.shvar1 "--"
 #else
