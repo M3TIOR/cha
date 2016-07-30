@@ -5,7 +5,7 @@
 	I'm a fucking idiot!
 	I'm spending a bunch of my time on trying to make this fucking thing
 	a modular load! Which is a waste of time put frankly.
-	ya know what? screw it... ninimal effort ftw.
+	ya know what? screw it... minimal effort ftw.
 -->
 <?
 	$NAME = "XAC";
