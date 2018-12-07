@@ -1,0 +1,18 @@
+/*
+	M3TIOR 2018
+
+	Explicit Assembler Basic Sample for Brainstorming
+*/
+
+#include "stdio.h; // Standard Library Import
+#default "ARM";
+
+#section ".text";
+$ 80186 @things > 00000001: db 0xAh;
+$ ARM {
+	@things: db b00000001;
+	@function: {
+		@stuff = db 2;
+		db 'x';
+	};
+};

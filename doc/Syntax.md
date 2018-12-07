@@ -4,10 +4,10 @@ The following is a comprehensive list of all keywords & syntax guidlines of Cha,
 
 ## Language key
  * `@` -- Variable Prefix
- * `:` -- Variable Name Suffix (Direct Variable Location)
- * `=` -- Variable Assignment
- * `$` -- Platform Namespace Prefix
- * `>` -- UNUSED
+ * `:` -- Variable Assignment
+ * `=` -- UNUSED
+ * `$` -- Platform Prefix
+ * `>` -- Direct Variable Location Suffix
  * `#` -- UNUSED
  * `%` -- UNUSED
  * `;` -- Instruction Ending
